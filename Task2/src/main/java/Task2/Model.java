@@ -19,7 +19,7 @@ public class Model {
 
     private ArrayList<Integer> history;
 
-    public Model(){
+    public Model() {
         history = new ArrayList<Integer>();
         setMin(0);
         setMax(100);
@@ -39,6 +39,8 @@ public class Model {
     /**
      * Function rand with parameters.
      *
+     * @param max for top value of range/
+     * @param min for bottom value of range/
      * @return random integer between min and max.
      */
     public int rand(int min, int max) {
@@ -71,17 +73,17 @@ public class Model {
         history.add(userNumber);
 
         if (userNumber > randomNumber) {
-            min = userNumber + 1;
+            max = userNumber - 1;
             return 1;
         }
         if (userNumber < randomNumber) {
-            max = userNumber - 1;
+            min = userNumber + 1;
             return -1;
         } else
             return 0;
     }
 
-    public ArrayList<Integer> getHistory(){
+    public ArrayList<Integer> getHistory() {
         return history;
     }
 
