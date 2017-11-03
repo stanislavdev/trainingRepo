@@ -1,18 +1,19 @@
 package Task2;
 
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import junit.framework.Assert;
-import junit.framework.Test;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.After;
 
 /**
  * Unit test for Model.
  */
 public class ModelTest
         extends TestCase {
+
     public void testRand() throws Exception {
         Model model = new Model();
-        Assert.assertTrue(model.rand(10,15) <=15 && model.rand(10,15)>=10);
+        assertTrue(model.rand(10,15) <=15 && model.rand(10,15)>=10);
 
     }
 
