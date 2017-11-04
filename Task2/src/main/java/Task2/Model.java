@@ -11,107 +11,100 @@ import java.util.Random;
  * Model
  */
 public class Model {
-    private int min;
-    private int max;
-    private int randomNumber;
-
+    /**
+     * Maximum of random number
+     */
     private static final int RAND_MAX = 65536;
+    /**
+     * Min border for random number
+     */
+    private int minBorderForRandomNumber;
+    /**
+     * Max border for random number
+     */
+    private int maxBorderForRandomNumber;
+    /**
+     * Random number which is guessed by programme
+     */
+    private int randomNumber;
+    /**
+     * Array for saving history of user tries
+     */
+    private ArrayList<Integer> historyOfPlayerAttempts = new ArrayList<Integer>();
 
-    private ArrayList<Integer> history;
-
-    public Model() {
-        history = new ArrayList<Integer>();
-        setMin(0);
-        setMax(100);
-        setRandomNumber(rand(getMin(), getMax()));
+    public static int getRandMax() {
+        return RAND_MAX;
     }
 
     /**
-     * Function rand without parameters.
+     * Method for setting borders of random value
      *
-     * @return random integer between 0 and RAND_MAX.
+     * @param minBorderForRandomNumber
+     * @param maxBorderForRandomNumber
      */
-    public int rand() {
-        Random random = new Random();
-        return random.nextInt(RAND_MAX + 1);
-    }
-
-    /**
-     * Function rand with parameters.
-     *
-     * @param max for top value of range/
-     * @param min for bottom value of range/
-     * @return random integer between min and max.
-     */
-    public int rand(int min, int max) {
-        if (max < min) {
+    public void setBorderMeasures(int minBorderForRandomNumber, int maxBorderForRandomNumber) {
+        if (maxBorderForRandomNumber < minBorderForRandomNumber) {
             System.out.println("Wrong measure of max and min");
-            return -1;
         } else {
-            Random random = new Random();
-            return min + random.nextInt(max - min + 1);
+            this.minBorderForRandomNumber = minBorderForRandomNumber;
+            this.maxBorderForRandomNumber = maxBorderForRandomNumber;
         }
     }
 
     /**
-     * Checking user number.
+     * Method for generation rand number with parameters
      *
-     * @return true if number is correct, false if not.
+     * @return random integer between min and max
      */
-    public boolean checkNumber(int guessedNumber) {
-        return guessedNumber <= max && guessedNumber >= min;
+    public void setRandomNumber() {
+        Random random = new Random();
+        randomNumber = minBorderForRandomNumber +
+                random.nextInt(maxBorderForRandomNumber - minBorderForRandomNumber + 1);
     }
 
     /**
-     * Cheching user guess.
+     * Checking user number which user input into console
      *
-     * @param userNumber is user number.
-     * @return 1 if user number is greater, -1 if lower and 0 if user number is equal to programme number.
+     * @return true if number is correct, false if not
      */
-    public int checkUserGuess(int userNumber) {
+    public boolean isNumberCorrect(int guessedNumber) {
+        return guessedNumber <= maxBorderForRandomNumber && guessedNumber >= minBorderForRandomNumber;
+    }
 
-        history.add(userNumber);
+    /**
+     * Checking user guess
+     *
+     * @param userNumber is user number
+     * @return 1 if user number is greater, -1 if lower and 0 if user number is equal to programme number
+     */
+    public int compareUserGuess(int userNumber) {
+
+        historyOfPlayerAttempts.add(userNumber);
 
         if (userNumber > randomNumber) {
-            max = userNumber - 1;
+            maxBorderForRandomNumber = userNumber - 1;
             return 1;
         }
         if (userNumber < randomNumber) {
-            min = userNumber + 1;
+            minBorderForRandomNumber = userNumber + 1;
             return -1;
         } else
             return 0;
     }
 
-    public ArrayList<Integer> getHistory() {
-        return history;
+    public int getMinBorderForRandomNumber() {
+        return minBorderForRandomNumber;
     }
 
-    public int getMin() {
-        return min;
-    }
-
-    public void setMin(int min) {
-        this.min = min;
-    }
-
-    public int getMax() {
-        return max;
-    }
-
-    public void setMax(int max) {
-        this.max = max;
+    public int getMaxBorderForRandomNumber() {
+        return maxBorderForRandomNumber;
     }
 
     public int getRandomNumber() {
         return randomNumber;
     }
 
-    public void setRandomNumber(int randomNumber) {
-        this.randomNumber = randomNumber;
-    }
-
-    public static int getRandMax() {
-        return RAND_MAX;
+    public ArrayList<Integer> getHistoryOfPlayerAttempts() {
+        return historyOfPlayerAttempts;
     }
 }

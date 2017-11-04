@@ -7,8 +7,8 @@ import java.util.Scanner;
  * Created by dvsta on 02.11.2017.
  */
 public class Controller {
-    Model model;
-    View view;
+    private Model model;
+    private View view;
 
     public Controller(Model model, View view) {
         this.model = model;
@@ -16,25 +16,23 @@ public class Controller {
     }
 
     /**
-     * Function fot user data input.
+     * Method fot user data input
      *
-     * @param scanner console input data.
-     * @return user input data or massage about wrong input.
+     * @param scanner console input data
+     * @return user input data or massage about wrong input
      */
     public int userInputData(Scanner scanner) {
         int inputUserNumberFromConsole;
         while (true) {
-            view.printMessage(View.INPUT_NUMBER);
             if (scanner.hasNextInt()) {
                 inputUserNumberFromConsole = scanner.nextInt();
-                if (model.checkNumber(inputUserNumberFromConsole)) {
+                if (model.isNumberCorrect(inputUserNumberFromConsole)) {
                     break;
-                }
-                else {
-                    view.printMessage(View.WRONG_INPUT);
+                } else {
+                    view.printWrongRangeInput(model);
                 }
             } else {
-                view.printMessage(View.WRONG_INPUT);
+                view.printWrongIntInput(model);
                 scanner.next();
             }
         }
@@ -44,23 +42,31 @@ public class Controller {
     /**
      * Start Java game
      */
-    public void run(){
+    public void run() {
         Scanner scanner = new Scanner(System.in);
-        while (true){
-            int result = model.checkUserGuess(userInputData(scanner));
-            if (result == 1 ){
-                view.printMessage(View.INPUT_DATA_IS_GREATER);
-                view.printPreviousHistory(model.getHistory());
-                view.printMessageAndRange(View.RANGE, model.getMin(), model.getMax());
+        model.setBorderMeasures(GlobalConstants.PRIMARY_MIN_BORDER,
+                GlobalConstants.PRIMARY_MAX_BORDER);
+
+        view.printMessage(view.getRangeMessage(model.getMinBorderForRandomNumber(),
+                model.getMaxBorderForRandomNumber()));
+        view.printMessage(view.getInputMessage());
+
+        model.setRandomNumber();
+        while (true) {
+            int result = model.compareUserGuess(userInputData(scanner));
+            if (result == 1) {
+                view.printGreaterNumber();
+                view.printMessage(view.getRangeMessage(model.getMinBorderForRandomNumber(),
+                        model.getMaxBorderForRandomNumber()));
             }
-            if (result == -1){
-                view.printMessage(View.INPUT_DATA_IS_SMALLER);
-                view.printPreviousHistory(model.getHistory());
-                view.printMessageAndRange(View.RANGE, model.getMin(), model.getMax());
+            if (result == -1) {
+                view.printSmallerNumber();
+                view.printMessage(view.getRangeMessage(model.getMinBorderForRandomNumber(),
+                        model.getMaxBorderForRandomNumber()));
             }
-            if (result == 0){
-                view.printMessage(View.SUCCESS);
-                view.printHistory(model.getHistory());
+            if (result == 0) {
+                view.printSuccessInput(model);
+                view.printHistory(model);
                 break;
             }
         }
