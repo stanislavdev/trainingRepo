@@ -1,8 +1,12 @@
 package Task3.controller;
 
+import Task3.model.Model;
+import Task3.model.NotUniqueLoginException;
+import Task3.model.Record;
 import Task3.view.TextConstant;
 import Task3.view.View;
 
+import java.util.ResourceBundle;
 import java.util.Scanner;
 
 /**
@@ -32,5 +36,16 @@ public class UtilityController {
             view.printMessage(view.getMessageFromResourceBoundle(View.WRONG_INPUT_DATA));
         }
         return result;
+    }
+
+    void addRecordToNoteBookFromConsole(Model model, ResourceBundle resourceBundle) {
+        model.getNoteBook().addRecord(new Record(
+                /*inputStringValueWithScanner(View.NAME_INPUT_DATA, resourceBundle.getString("name")),
+                inputStringValueWithScanner(View.SURNAME_INPUT_DATA, resourceBundle.getString("surname")),*/
+                inputStringValueWithScanner(View.NICKNAME_INPUT_DATA, resourceBundle.getString("nickName"))/*,
+                inputStringValueWithScanner(View.PHON_NUMBER_INPUT_DATA, resourceBundle.getString("phoneNumber")),
+                inputStringValueWithScanner(View.SKYPE_INPUT_DATA, resourceBundle.getString("skype")),
+                inputStringValueWithScanner(View.EMAIL_INPUT_DATA, resourceBundle.getString("email"))*/
+        ));
     }
 }

@@ -1,7 +1,7 @@
 package Task3.controller;
 
 import Task3.model.Model;
-import Task3.view.TextConstant;
+import Task3.model.NotUniqueLoginException;
 import Task3.view.View;
 
 import java.util.Locale;
@@ -23,27 +23,29 @@ public class Controller {
 
     public void processUser() {
         Scanner scanner = new Scanner(System.in);
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("regex", new Locale("en"));
         utilityController = new UtilityController(scanner, view);
-        model.setName(utilityController.inputStringValueWithScanner(
-                View.NAME_INPUT_DATA, resourceBundle.getString("name")));
-        model.setSurname(utilityController.inputStringValueWithScanner(
-                View.SURNAME_INPUT_DATA, resourceBundle.getString("surname")));
-        model.setNickName(utilityController.inputStringValueWithScanner(
-                View.NICKNAME_INPUT_DATA, resourceBundle.getString("nickName")));
-        model.setPhoneNumber(utilityController.inputStringValueWithScanner(
-                View.PHON_NUMBER_INPUT_DATA, resourceBundle.getString("phoneNumber")));
-        model.setSkype(utilityController.inputStringValueWithScanner(
-                View.SKYPE_INPUT_DATA, resourceBundle.getString("skype")));
-        model.setEmail(utilityController.inputStringValueWithScanner(
-                View.EMAIL_INPUT_DATA, resourceBundle.getString("email")));
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("regex", new Locale("en"));
+        while (true) {
+            try {
+                utilityController.addRecordToNoteBookFromConsole(model, resourceBundle);
+            } catch (NotUniqueLoginException exception) {
+                exception.printStackTrace();
+                askAnotherLogin(exception, utilityController, resourceBundle);
+            }
+            view.printMessage(model.getNoteBook().getRecordArrayList().get(
+                    model.getNoteBook().getRecordArrayList().size() - 1).toString());
+        }
+    }
 
-        view.printMessage(view.concatenationString(
-                model.getName(), TextConstant.SPACE_SING,
-                model.getSurname(), TextConstant.SPACE_SING,
-                model.getNickName(), TextConstant.SPACE_SING,
-                model.getPhoneNumber(), TextConstant.SPACE_SING,
-                model.getSkype(), TextConstant.SPACE_SING, model.getEmail()
-        ));
+    void askAnotherLogin(NotUniqueLoginException ex, UtilityController utilityController, ResourceBundle resourceBundle) {
+        try {
+            String inputLogin = utilityController.inputStringValueWithScanner(View.NICKNAME_INPUT_DATA,
+                    resourceBundle.getString("nickName"));
+            ex.getRecord().setNickName(inputLogin);
+            model.getNoteBook().addRecord(ex.getRecord());
+        } catch (NotUniqueLoginException exception) {
+            exception.printStackTrace();
+            askAnotherLogin(exception, utilityController, resourceBundle);
+        }
     }
 }
