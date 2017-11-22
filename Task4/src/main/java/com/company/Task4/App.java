@@ -9,5 +9,6 @@ public class App {
         View view = new View();
         Controller controller = new Controller(model, view);
         controller.findRepeats();
+        controller.demonstraiteMyArrayList();
     }
 }
